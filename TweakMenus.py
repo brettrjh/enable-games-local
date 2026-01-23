@@ -1,12 +1,17 @@
 
 from PyQt6 import QtWidgets, uic
 
+# needed for connectivity/opening the main menu
+from MainMenu import MainMenu
+
+
 # ------------------------------------------------------------------------------
 # VisualMenu Class: 
 # - inherits from the QWidget
 #     - QWidget is the name in Qt Designer for the Visual Settings widget
 #     - go to the Object Inspector in Qt Designer to change it's name
 # ------------------------------------------------------------------------------
+
 class VisualMenu(QtWidgets.QWidget):
     # -------------------------------------------------------------
     # Initialization for ui file and connecting buttons to functions
@@ -42,6 +47,7 @@ class VisualMenu(QtWidgets.QWidget):
 #     - QWidget is the name in Qt Designer for the Audio Settings widget
 #     - go to the Object Inspector in Qt Designer to change it's name
 # ------------------------------------------------------------------------------
+
 class AudioMenu(QtWidgets.QWidget):
     # -------------------------------------------------------------
     # Initialization for ui file and connecting buttons to functions
@@ -77,31 +83,53 @@ class AudioMenu(QtWidgets.QWidget):
 #     - QWidget is the name in Qt Designer for the Physical Settings widget
 #     - go to the Object Inspector in Qt Designer to change it's name
 # ------------------------------------------------------------------------------
+
+from MainMenu import MainMenu
+
+# physical menu window class
 class PhysMenu(QtWidgets.QWidget):
-    # -------------------------------------------------------------
-    # Initialization for ui file and connecting buttons to functions
     def __init__(self):
         super().__init__()
-        
-        # Loads the UI file and sets the window title
-        uic.loadUi('ui files/eg_physical_settings.ui', self)
-        self.setWindowTitle('Physical Settings')
 
-        # Connections of button click events to specific functions
-        self.pushButton.clicked.connect(self.on_button_click)
-        self.pushButton_2.clicked.connect(self.on_button_click_2)
+        # load the ui file for physical menu
+        uic.loadUi('ui files/PhysMenu.ui', self)
 
-    # ------------------------------------------------------------
-    # [insert name] Function:
-    # - called when the given button is clicked
-    def on_button_click(self):
-        print("Button from the UI was clicked!")
+        # connect buttons to function
+        self.mainMenuPB.clicked.connect(self.main_button_clicked)
+        self.controlsPB.clicked.connect(self.controls_button_clicked)
+        self.autofirePB.clicked.connect(self.autofire_button_clicked)
 
-    # ------------------------------------------------------------
-    # [insert name] Function:
-    # - called when the given button is clicked
-    def on_button_click_2(self):
-        self.label.setText('Hello World')
+
+
+
+    # called when main menu button clicked, opens main menu
+    def main_button_clicked(self):
+        print('main menu button clicked!')
+
+
+        # opening main menu window debugging
+        '''
+        try:
+            print('creating main menu...')
+            self.MainMenu_window = MainMenu()
+            print('showing main menu...')
+            self.MainMenu_window.show()
+            print('closing physical menu...')
+            self.close()
+            print('done!')
+        except Exception as e:
+            print(f"error: {e}")
+            import traceback
+            traceback.print_exc()
+        '''
+
+    # other button functions called when they are clicked
+    def controls_button_clicked(self):
+        print('controls menu button clicked!')
+    def autofire_button_clicked(self):
+        print('autofire menu button clicked!')
+
+
 
 
 
