@@ -77,13 +77,13 @@ class AudioMenu(QtWidgets.QWidget):
         self.btnBack.clicked.connect(self.back_clicked)
 
     # ------------------------------------------------------------
-    # [insert name] Function:
+    # Subtitle Function:
     # - called when the given button is clicked
     def subtitles_clicked(self):
         print("Subtitles button clicked!")
 
     # ------------------------------------------------------------
-    # [insert name] Function:
+    # Dynamic Range Function:
     # - called when the given button is clicked
     def dynamic_range_clicked(self):
         print("Dynamic Range button clicked!")
@@ -93,9 +93,18 @@ class AudioMenu(QtWidgets.QWidget):
     def back_clicked(self):
         print("Back to main menu!")
 
-        self.close()
-
-
+        try:
+            print('creating main menu...')
+            self.MainMenu_window = MainMenu()
+            print('showing main menu...')
+            self.MainMenu_window.show()
+            print('closing physical menu...')
+            self.close()
+            print('done!')
+        except Exception as e:
+            print(f"error: {e}")
+            import traceback
+            traceback.print_exc()
 
 
 # ------------------------------------------------------------------------------
@@ -181,3 +190,4 @@ if __name__ == "__main__":
     
 
     sys.exit(app.exec())                    # Run the application's event loop
+
