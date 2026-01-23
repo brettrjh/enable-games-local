@@ -1,6 +1,8 @@
 
 from PyQt6 import QtWidgets, uic
 
+from PyQt6.QtGui import QPixmap
+
 # needed for connectivity/opening the main menu
 from MainMenu import MainMenu
 
@@ -58,21 +60,36 @@ class AudioMenu(QtWidgets.QWidget):
         uic.loadUi('ui files/eg_audio_settings.ui', self)
         self.setWindowTitle('Audio Settings')
 
+        # Loads the icon dynamically
+        pixmap = QPixmap("ui files/Images/Sound.png")
+        if pixmap.isNull():
+            print("could not laod icon")
+        self.iconLabel.setPixmap(pixmap)
+        self.iconLabel.setScaledContents(True)
+
         # Connections of button click events to specific functions
-        self.pushButton.clicked.connect(self.on_button_click)
-        self.pushButton_2.clicked.connect(self.on_button_click_2)
+        self.btnSubtitles.clicked.connect(self.subtitles_clicked)
+        self.btnDynRange.clicked.connect(self.dynamic_range_clicked)
+        self.btnBack.clicked.connect(self.back_clicked)
 
     # ------------------------------------------------------------
     # [insert name] Function:
     # - called when the given button is clicked
-    def on_button_click(self):
-        print("Button from the UI was clicked!")
+    def subtitles_clicked(self):
+        print("Subtitles button clicked!")
 
     # ------------------------------------------------------------
     # [insert name] Function:
     # - called when the given button is clicked
-    def on_button_click_2(self):
-        self.label.setText('Hello World')
+    def dynamic_range_clicked(self):
+        print("Dynamic Range button clicked!")
+
+    #back to main menu Function:
+    # - called when the given button is clicked
+    def back_clicked(self):
+        print("Back to main menu!")
+
+        self.close()
 
 
 
@@ -151,4 +168,5 @@ if __name__ == "__main__":
     audioW.show()                           # Show the audio settings
     physicalW.show()                        # Show the physical settings
     
+
     sys.exit(app.exec())                    # Run the application's event loop
