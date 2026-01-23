@@ -14,6 +14,7 @@ from MainMenu import MainMenu
 #     - go to the Object Inspector in Qt Designer to change it's name
 # ------------------------------------------------------------------------------
 
+
 class VisualMenu(QtWidgets.QWidget):
     # -------------------------------------------------------------
     # Initialization for ui file and connecting buttons to functions
@@ -25,8 +26,11 @@ class VisualMenu(QtWidgets.QWidget):
         self.setWindowTitle('Visual Settings')
 
         # Connections of button click events to specific functions
-        self.pushButton.clicked.connect(self.on_button_click)
-        self.pushButton_2.clicked.connect(self.on_button_click_2)
+
+        # commenting below out (no buttons yet in eg_visual_settings.ui)
+
+        # self.pushButton.clicked.connect(self.on_button_click)
+        # self.pushButton_2.clicked.connect(self.on_button_click_2)
 
     # ------------------------------------------------------------
     # [insert name] Function:
@@ -111,8 +115,15 @@ class PhysMenu(QtWidgets.QWidget):
         # load the ui file for physical menu
         uic.loadUi('ui files/PhysMenu.ui', self)
 
+        pixmap = QPixmap("ui files/Images/physicaldisability.png")
+        if pixmap.isNull():
+            print("could not load icon")
+
+        self.iconLabel.setPixmap(pixmap)
+        self.iconLabel.setScaledContents(True)
+
         # connect buttons to function
-        self.mainMenuPB.clicked.connect(self.main_button_clicked)
+        self.btnBack.clicked.connect(self.main_button_clicked)
         self.controlsPB.clicked.connect(self.controls_button_clicked)
         self.autofirePB.clicked.connect(self.autofire_button_clicked)
 
@@ -125,7 +136,7 @@ class PhysMenu(QtWidgets.QWidget):
 
 
         # opening main menu window debugging
-        '''
+
         try:
             print('creating main menu...')
             self.MainMenu_window = MainMenu()
@@ -138,7 +149,7 @@ class PhysMenu(QtWidgets.QWidget):
             print(f"error: {e}")
             import traceback
             traceback.print_exc()
-        '''
+
 
     # other button functions called when they are clicked
     def controls_button_clicked(self):
