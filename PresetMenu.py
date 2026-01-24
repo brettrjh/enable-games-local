@@ -1,5 +1,13 @@
-
+import os
 from PyQt6 import QtWidgets, uic
+
+from PyQt6.QtGui import QPixmap
+
+from PyQt6.QtCore import QPoint
+from PyQt6.QtGui import QAction
+
+# needed for connectivity/opening the main menu
+import MainMenu
 
 # ------------------------------------------------------------------------------
 # PresetMenu Class: 
