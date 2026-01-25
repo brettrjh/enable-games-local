@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>presetMenuW</class>
- <widget class="QWidget" name="presetMenuW">
+ <class>presetDownloadW</class>
+ <widget class="QWidget" name="presetDownloadW">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -68,7 +68,7 @@
           <string/>
          </property>
          <property name="pixmap">
-          <pixmap>Images/preset_filter_icon.jpg</pixmap>
+          <pixmap>Images/preset_download_icon.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
@@ -93,7 +93,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Preset Menu</string>
+          <string>Preset Download</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -109,7 +109,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Saved Configurations</string>
+          <string>Browse &amp; Download</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -117,7 +117,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnFilter">
+        <widget class="QPushButton" name="btnPresetDownload">
          <property name="minimumSize">
           <size>
            <width>389</width>
@@ -134,7 +134,7 @@
           <string notr="true">text-align: left;</string>
          </property>
          <property name="text">
-          <string>Filter Options</string>
+          <string>Download Preset</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -142,7 +142,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnPresetToggle">
+        <widget class="QPushButton" name="btnCreator">
          <property name="minimumSize">
           <size>
            <width>389</width>
@@ -159,12 +159,12 @@
           <string notr="true">text-align: left;</string>
          </property>
          <property name="text">
-          <string>Toggle Downloaded Presets</string>
+          <string>More From This Creator</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnDownloads">
+        <widget class="QPushButton" name="btnReport">
          <property name="minimumSize">
           <size>
            <width>389</width>
@@ -181,7 +181,7 @@
           <string notr="true">text-align: left;</string>
          </property>
          <property name="text">
-          <string>Downloads →</string>
+          <string>Report</string>
          </property>
         </widget>
        </item>
@@ -196,7 +196,7 @@
         </widget>
        </item>
        <item alignment="Qt::AlignLeft">
-        <widget class="QPushButton" name="btnBackToMain">
+        <widget class="QPushButton" name="btnBackToPreset">
          <property name="enabled">
           <bool>true</bool>
          </property>
@@ -214,7 +214,7 @@
           </string>
          </property>
          <property name="text">
-          <string>← Back to Main Menu</string>
+          <string>← Back to Preset Menu</string>
          </property>
          <property name="autoDefault">
           <bool>false</bool>
