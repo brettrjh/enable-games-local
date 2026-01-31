@@ -17,23 +17,32 @@ import MainMenu
 # ------------------------------------------------------------------------------
 
 class VisualMenu(QtWidgets.QWidget):
-    # -------------------------------------------------------------
+    # --------------------------------------------------------------
     # Initialization for ui file and connecting buttons to functions
     def __init__(self, on_back=None):
         super().__init__()
 
         # Load the UI file
-        ui_path = os.path.join(os.path.dirname(__file__), "ui files", "eg_visual_settings.ui")
+        ui_path = os.path.join(os.path.dirname(__file__), "ui files", "eg_visual_settings_test.ui")
         uic.loadUi(ui_path, self)
 
-        # Set window title
+        # Set window title and other initialization
         self.setWindowTitle('Visual Settings')
+        self.colorOptions.hide()
+        #self.frameCard.adjustSize()
+        #self.height = self.layoutWindow_2.size().height()
+        #self.width = self.layoutWindow_2.size().width()
+        #print(f"Here's the height: {self.height}")
+        #print(f"Here's the width: {self.width}")
 
         # button connections
         self.btnColorblind.clicked.connect(self.show_colorblind_menu)
         self.btnContrast.clicked.connect(self.show_contrast_menu)
         self.btnPOIHighlight.clicked.connect(self.show_poi_menu)
         self.btnBack.clicked.connect(self.back)
+
+        # utility variables
+        self.isHiddenColorBlind = True
 
     # back button, returns to main menu
     def back(self):
@@ -55,22 +64,26 @@ class VisualMenu(QtWidgets.QWidget):
         global_pos = button.mapToGlobal(QPoint(0, button.height()))
         menu.exec(global_pos)
     
+    # --------------------------------------------------------------
+    # Colorblindess Correction related functions
     # Colorblind menu
     def show_colorblind_menu(self):
-        menu = QtWidgets.QMenu()
+        if self.isHiddenColorBlind:
+            self.colorOptions.show()
+            self.isHiddenColorBlind = False
+        else:
+            self.colorOptions.hide()
+            self.isHiddenColorBlind = True
 
-        none_action = QAction("None", self)
-        deuteranopia_action = QAction("Deuteranopia", self)
-        protanopia_action = QAction("Protanopia", self)
-        tritanopia_action = QAction("Tritanopia", self)
+        #self.layoutWindow_2.frameSize()
+        #self.frameCard.adjustSize()
 
-        menu.addAction(none_action)
-        menu.addAction(deuteranopia_action)
-        menu.addAction(protanopia_action)
-        menu.addAction(tritanopia_action)
 
-        self._show_menu_below_button(self.btnColorblind, menu)
+    # Colorblind Selection
+    #def colorblind_selection(self):
     
+    # --------------------------------------------------------------
+    # Contrast Adjustment related functions
     # Contrast menu
     def show_contrast_menu(self):
         menu = QtWidgets.QMenu()
