@@ -23,12 +23,13 @@ class VisualMenu(QtWidgets.QWidget):
         super().__init__()
 
         # Load the UI file
-        ui_path = os.path.join(os.path.dirname(__file__), "ui files", "eg_visual_settings_test.ui")
+        ui_path = os.path.join(os.path.dirname(__file__), "ui files", "eg_visual_settings.ui")
         uic.loadUi(ui_path, self)
 
         # Set window title and other initialization
         self.setWindowTitle('Visual Settings')
         self.colorOptions.hide()
+        self.contrastOptions.hide()
         #self.frameCard.adjustSize()
         #self.height = self.layoutWindow_2.size().height()
         #self.width = self.layoutWindow_2.size().width()
@@ -43,6 +44,7 @@ class VisualMenu(QtWidgets.QWidget):
 
         # utility variables
         self.isHiddenColorBlind = True
+        self.isHiddenContrastCorrection = True
 
     # back button, returns to main menu
     def back(self):
@@ -86,17 +88,12 @@ class VisualMenu(QtWidgets.QWidget):
     # Contrast Adjustment related functions
     # Contrast menu
     def show_contrast_menu(self):
-        menu = QtWidgets.QMenu()
-
-        low_action = QAction("Low", self)
-        medium_action = QAction("Medium", self)
-        high_action = QAction("High", self)
-
-        menu.addAction(low_action)
-        menu.addAction(medium_action)
-        menu.addAction(high_action)
-
-        self._show_menu_below_button(self.btnContrast, menu)
+        if self.isHiddenContrastCorrection:
+            self.contrastOptions.show()
+            self.isHiddenContrastCorrection = False
+        else:
+            self.contrastOptions.hide()
+            self.isHiddenContrastCorrection = True
 
     # POI menu
     def show_poi_menu(self):
