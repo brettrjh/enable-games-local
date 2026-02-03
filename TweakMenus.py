@@ -3,8 +3,8 @@ from PyQt6 import QtWidgets, uic
 
 from PyQt6.QtGui import QPixmap
 
-from PyQt6.QtCore import QPoint
-from PyQt6.QtGui import QAction
+from PyQt6.QtCore import QPoint, Qt
+from PyQt6.QtGui import QAction, QFont
 
 # needed for connectivity/opening the main menu
 import MainMenu
@@ -23,7 +23,7 @@ class VisualMenu(QtWidgets.QWidget):
         super().__init__()
 
         # Load the UI file
-        ui_path = os.path.join(os.path.dirname(__file__), "ui files", "eg_visual_settings_test.ui")
+        ui_path = os.path.join(os.path.dirname(__file__), "ui files", "eg_visual_settings.ui")
         uic.loadUi(ui_path, self)
 
         # Set window title and other initialization
@@ -127,26 +127,109 @@ class AudioMenu(QtWidgets.QWidget):
         super().__init__()
         
         # Loads the UI file and sets the window title
-        uic.loadUi('ui files/eg_audio_settings.ui', self)
-        self.setWindowTitle('Audio Settings')
+        baseDir = os.path.dirname(__file__)
+        ui_path = os.path.join(baseDir, "ui files", "eg_audio_settings.ui")
+        uic.loadUi(ui_path, self)
+        self.subtitleOptions.hide()
 
         # Loads the icon dynamically
-        pixmap = QPixmap("ui files/Images/Sound.png")
+        img_path = os.path.join(baseDir, "ui files", "Images", "Sound.png")
+        pixmap = QPixmap(img_path)
         if pixmap.isNull():
             print("could not laod icon")
         self.iconLabel.setPixmap(pixmap)
         self.iconLabel.setScaledContents(True)
 
         # Connections of button click events to specific functions
-        self.btnSubtitles.clicked.connect(self.subtitles_clicked)
+        self.btnSubtitles.clicked.connect(self.toggle_subtitle_options)
         self.btnDynRange.clicked.connect(self.dynamic_range_clicked)
         self.btnBack.clicked.connect(self.back_clicked)
 
+        # Subtitle Preview Label Setup
+        self.lblSubtitlePreview.setText("This is a subtitle preview.\nAdjust settings to see changes.")
+        self.lblSubtitlePreview.setWordWrap(True)
+
+        # Connections for subtitle options to update preview
+        self.chkSubtitleEnabled.toggled.connect(self.update_subtitle_preview)
+        self.cmbSubtitleColor.currentIndexChanged.connect(self.update_subtitle_preview)
+        self.cmbSubtitlePosition.currentIndexChanged.connect(self.update_subtitle_preview)
+        self.chkSubtitleBackground.toggled.connect(self.update_subtitle_preview)
+        self.sldSubtitleBgOpacity.valueChanged.connect(self.update_subtitle_preview)
+        self.spnSubtitleFontSize.valueChanged.connect(self.update_subtitle_preview)
+
+
+        # Run once so it matches current default settings
+        self.update_subtitle_preview()
+
+
     # ------------------------------------------------------------
-    # Subtitle Function:
-    # - called when the given button is clicked
-    def subtitles_clicked(self):
-        print("Subtitles button clicked!")
+    # Subtitle Options Toggle Function:
+    def toggle_subtitle_options(self):
+        if self.subtitleOptions.isVisible():
+            self.subtitleOptions.hide()
+        else:
+            self.subtitleOptions.show()
+
+    # ------------------------------------------------------------
+    # Update Subtitle Preview Function:
+    def update_subtitle_preview(self):
+        enabled = self.chkSubtitleEnabled.isChecked()
+
+    # --- Show/Hide Preview ---
+        self.lblSubtitlePreview.setVisible(enabled)
+
+        if not enabled:
+            return
+
+    # --- Text Color ---
+        selected = self.cmbSubtitleColor.currentText().strip().lower()
+        color_map = {
+            "White": "white",
+            "Yellow": "yellow",
+            "Cyan": "cyan",
+            "Green": "lime",
+            "Red": "red",
+            "Blue": "deepskyblue",
+            "Default": "white",
+            "(none)": "white",
+            "none": "white",
+        }
+        txt_color = color_map.get(selected, selected if selected else "white")
+
+        # --- Background box + opacity ---
+        if self.chkSubtitleBackground.isChecked():
+            alpha = self.sldSubtitleBgOpacity.value() / 100.0 
+            style = (
+                f"color: {txt_color};"
+                f"background-color: rgba(0, 0, 0, {alpha});"
+                "padding: 8px;"
+                "border-radius: 6px;"
+            )
+        else:
+            style = f"color: {txt_color}; background: transparent; padding: 8px;"
+
+        self.lblSubtitlePreview.setStyleSheet(style)
+
+        # --- Position in preview box ---
+        pos_text = self.cmbSubtitlePosition.currentText().strip().lower()
+        if "top" in pos_text:
+            self.lblSubtitlePreview.setAlignment(
+                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop
+            )
+        elif "bottom" in pos_text:
+            self.lblSubtitlePreview.setAlignment(
+                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignBottom
+            )
+        else:
+            self.lblSubtitlePreview.setAlignment(
+                Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignBottom
+            )
+        
+        # --- Font Size ---
+        font = self.lblSubtitlePreview.font()
+        font.setPointSize(self.spnSubtitleFontSize.value())
+        self.lblSubtitlePreview.setFont(font)
+
 
     # ------------------------------------------------------------
     # Dynamic Range Function:
