@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>789</width>
-    <height>469</height>
+    <height>548</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -25,7 +25,7 @@
      <x>40</x>
      <y>40</y>
      <width>711</width>
-     <height>401</height>
+     <height>441</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="layoutWindow">
@@ -57,7 +57,7 @@
          <x>0</x>
          <y>0</y>
          <width>421</width>
-         <height>381</height>
+         <height>419</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="layoutContent">
@@ -175,6 +175,9 @@ text-align: left;
         </item>
         <item>
          <widget class="QWidget" name="colorOptions" native="true">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -274,6 +277,68 @@ text-align: left;
          </widget>
         </item>
         <item>
+         <widget class="QWidget" name="contrastOptions" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
+          <widget class="QWidget" name="gridLayoutWidget_2">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>391</width>
+             <height>46</height>
+            </rect>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="2" column="0">
+             <widget class="QLabel" name="lblContrastScreen">
+              <property name="text">
+               <string>Screen Contrast Correction: </string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lblContrastUI">
+              <property name="text">
+               <string>UI Contrast Correction:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSlider" name="sliderContrastUI">
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QSlider" name="sliderContrastScreen">
+              <property name="maximumSize">
+               <size>
+                <width>200</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="btnPOIHighlight">
           <property name="styleSheet">
            <string notr="true">QPushButton{
@@ -346,7 +411,7 @@ text-align: left;
          <x>420</x>
          <y>0</y>
          <width>271</width>
-         <height>381</height>
+         <height>421</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="layoutPreview">
