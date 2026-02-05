@@ -8,6 +8,7 @@ from PyQt6.QtGui import QAction, QFont
 
 # needed for connectivity/opening the main menu
 import MainMenu
+from overlay import OverlayManager
 
 # ------------------------------------------------------------------------------
 # VisualMenu Class: 
@@ -30,6 +31,11 @@ class VisualMenu(QtWidgets.QWidget):
         self.setWindowTitle('Visual Settings')
         self.colorOptions.hide()
         self.contrastOptions.hide()
+        # overlay manager (controls full-screen overlays on all screens)
+        try:
+            self.overlay = OverlayManager(QtWidgets.QApplication.instance())
+        except Exception:
+            self.overlay = None
         #self.frameCard.adjustSize()
         #self.height = self.layoutWindow_2.size().height()
         #self.width = self.layoutWindow_2.size().width()
@@ -41,6 +47,26 @@ class VisualMenu(QtWidgets.QWidget):
         self.btnContrast.clicked.connect(self.show_contrast_menu)
         self.btnPOIHighlight.clicked.connect(self.show_poi_menu)
         self.btnBack.clicked.connect(self.back)
+
+        # connect overlay-related controls if overlay manager created
+        if getattr(self, 'overlay', None):
+            # screen contrast slider -> overlay brightness
+            try:
+                self.sliderContrastScreen.valueChanged.connect(self.overlay.set_brightness_from_slider)
+            except Exception:
+                pass
+
+            # colorblind selection -> overlay type
+            try:
+                self.comboxColorBlindType.currentTextChanged.connect(self.overlay.set_colorblind_type)
+            except Exception:
+                pass
+
+            # colorblind intensity slider -> overlay intensity
+            try:
+                self.slideColorBlindIntensity.valueChanged.connect(self.overlay.set_colorblind_intensity)
+            except Exception:
+                pass
 
         # utility variables
         self.isHiddenColorBlind = True
