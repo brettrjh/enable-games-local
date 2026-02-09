@@ -36,7 +36,9 @@ class VisualMenu(QtWidgets.QWidget):
         # Set window title and other initialization
         self.setWindowTitle('Visual Settings')
         self.colorOptions.hide()
-        self.contrastOptions.hide()
+   #     self.contrastOptions.hide()
+        self.poiOptions.hide()
+
         # overlay manager (controls full-screen overlays on all screens)
         try:
             self.overlay = OverlayManager(QtWidgets.QApplication.instance())
@@ -65,10 +67,15 @@ class VisualMenu(QtWidgets.QWidget):
         # contrast button connections
         self.btnContrast.clicked.connect(self.show_contrast_menu)
         self.isHiddenContrastCorrection = True
-        
+
         # POI button connections
         self.btnPOIHighlight.clicked.connect(self.show_poi_menu)
-        
+        self.chkPoiMagnifier.toggled.connect(self.toggle_poi_magnifier)
+        self.magnifier = None
+        self.sldPoiZoom.valueChanged.connect(self.update_poi_zoom_label)
+        self.isHiddenPoiMenu = True
+        self.update_poi_zoom_label(self.sldPoiZoom.value())
+
         self.btnBack.clicked.connect(self.back)
 
         # ==============================
@@ -94,6 +101,16 @@ class VisualMenu(QtWidgets.QWidget):
             except Exception:
                 pass
 
+    def toggle_magnifier(self, enabled: bool):
+        if enabled:
+            if self.magnifier is None:
+                self.magnifier = MagnifierWindow(zoom=2.0, size=180)
+            self.magnifier.start()
+        else:
+            if self.magnifier is not None:
+                self.magnifier.stop()
+
+
 
     # back button, returns to main menu
     def back(self):
@@ -109,7 +126,12 @@ class VisualMenu(QtWidgets.QWidget):
             print(f"error: {e}")
             import traceback
             traceback.print_exc()
-    
+
+    def closeEvent(self, event):
+        if self.magnifier is not None:
+            self.magnifier.stop()
+        super().closeEvent(event)
+
     # --------------------------------------------------------------
     # Colorblindess Correction related functions
     # Colorblind menu
@@ -159,12 +181,24 @@ class VisualMenu(QtWidgets.QWidget):
             self.contrastOptions.hide()
             self.isHiddenContrastCorrection = True
 
+
     # --------------------------------------------------------------
     # POI Highlighting related functions
     # POI menu
     def show_poi_menu(self):
-        print("placeholder")
-        
+        if self.isHiddenPoiMenu:
+            self.poiOptions.show()
+            self.isHiddenPoiMenu = False
+        else:
+            self.poiOptions.hide()
+            self.isHiddenPoiMenu = True
+
+    def toggle_poi_magnifier(self, enabled):
+        state = "enabled" if enabled else "disabled"
+        print(f"Magnifier {state}")
+
+    def update_poi_zoom_label(self, value):
+        self.labelPoiZoomValue.setText(f"{value}x")
 
 
 
@@ -371,19 +405,20 @@ class PhysMenu(QtWidgets.QWidget):
 # ---------------------------------------------------------------------------------
 # Temporary Script Execution (for testing purposes)
 # ---------------------------------------------------------------------------------
-#if __name__ == "__main__":
-#    import sys
-#
-#    app = QtWidgets.QApplication(sys.argv)  # Create the application
-#    visualW = VisualMenu()
-#    audioW = AudioMenu()
-#    physicalW = PhysMenu()
+if __name__ == "__main__":
+    import sys
+
+    app = QtWidgets.QApplication(sys.argv)  # Create the application
+    visualW = VisualMenu()
+    audioW = AudioMenu()
+    physicalW = PhysMenu()
 
     # ***** IMPORTANT READ ME PLEASE !!!!!!! *****
     # WHEN TESTING, JUST COMMENT OUT THE .show() METHODS THAT AREN'T
     # YOURS SO IT WILL ONLY SHOW YOUR WINDOW WHILE TESTING
-    #visualW.show()                          # Show the visual settings
-    #audioW.show()                           # Show the audio settings
-    #physicalW.show()                        # Show the physical settings
-    
-#    sys.exit(app.exec())                    # Run the application's event loop
+    visualW.show()                          # Show the visual settings
+    audioW.show()                           # Show the audio settings
+    physicalW.show()                        # Show the physical settings
+
+    sys.exit(app.exec())                    # Run the application's event loop
+
