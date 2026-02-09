@@ -8,6 +8,12 @@ from PyQt6.QtGui import QAction, QFont
 
 # needed for connectivity/opening the main menu
 import MainMenu
+
+# needed for color / contrast correction
+import cv2
+import numpy
+import PIL
+from PyQt6.QtGui import QImage
 from overlay import OverlayManager
 
 # ------------------------------------------------------------------------------
@@ -36,18 +42,38 @@ class VisualMenu(QtWidgets.QWidget):
             self.overlay = OverlayManager(QtWidgets.QApplication.instance())
         except Exception:
             self.overlay = None
-        #self.frameCard.adjustSize()
-        #self.height = self.layoutWindow_2.size().height()
-        #self.width = self.layoutWindow_2.size().width()
-        #print(f"Here's the height: {self.height}")
-        #print(f"Here's the width: {self.width}")
 
-        # button connections
+        # Loads the color preview dynamically
+        self.colorPixmap = QPixmap("ui files/Images/pigment.png")
+        if self.colorPixmap.isNull():
+            print("could not laod icon")
+        self.colorPreview.setPixmap(self.colorPixmap)
+        #self.iconLabel.setScaledContents(True)
+
+        # ==============================
+        # Button Connections
+        # ==============================
+        # colorblind utilities
         self.btnColorblind.clicked.connect(self.show_colorblind_menu)
+        self.slideColorBlindIntensity.valueChanged.connect(self.colorblind_intensity)
+        self.comboxColorBlindType.activated.connect(self.colorblind_type)
+        self.isHiddenColorBlind = True
+        self.colorblindType = "(None)"
+        self.colorFilter = cv2.imread("ui files/Images/pigment.png")
+        self.colorFilter = cv2.cvtColor(self.colorFilter, cv2.COLOR_RGB2HSV)
+        
+        # contrast button connections
         self.btnContrast.clicked.connect(self.show_contrast_menu)
+        self.isHiddenContrastCorrection = True
+        
+        # POI button connections
         self.btnPOIHighlight.clicked.connect(self.show_poi_menu)
+        
         self.btnBack.clicked.connect(self.back)
 
+        # ==============================
+        # Overlay Connections
+        # ==============================
         # connect overlay-related controls if overlay manager created
         if getattr(self, 'overlay', None):
             # screen contrast slider -> overlay brightness
@@ -68,9 +94,6 @@ class VisualMenu(QtWidgets.QWidget):
             except Exception:
                 pass
 
-        # utility variables
-        self.isHiddenColorBlind = True
-        self.isHiddenContrastCorrection = True
 
     # back button, returns to main menu
     def back(self):
@@ -86,11 +109,6 @@ class VisualMenu(QtWidgets.QWidget):
             print(f"error: {e}")
             import traceback
             traceback.print_exc()
-        
-    # dropdown menu function
-    def _show_menu_below_button(self, button: QtWidgets.QPushButton, menu: QtWidgets.QMenu):
-        global_pos = button.mapToGlobal(QPoint(0, button.height()))
-        menu.exec(global_pos)
     
     # --------------------------------------------------------------
     # Colorblindess Correction related functions
@@ -106,10 +124,30 @@ class VisualMenu(QtWidgets.QWidget):
         #self.layoutWindow_2.frameSize()
         #self.frameCard.adjustSize()
 
+    # Colorblind Type
+    def colorblind_type(self):
+        self.colorblindType = self.comboxColorBlindType.currentText()
+        print(f"Current Type Is: {self.colorblindType}")
 
-    # Colorblind Selection
-    #def colorblind_selection(self):
-    
+    # Colorblind Intensity
+    def colorblind_intensity(self, value):
+        
+        # Make orange blue just to test
+        hue = self.colorFilter[:,:,0]
+        hue = hue + 60
+        #if hue[:,:] > 180:
+        #    hue[:,:] - 180
+        self.colorFilter[:,:,0] = hue
+        filteredImg = cv2.cvtColor(self.colorFilter, cv2.COLOR_HSV2RGB)
+        # Converting filtered image to Qpixmap
+        height, width, channel = filteredImg.shape
+        bytesPerLine = 3 * width
+        convertedImg = QImage(filteredImg.data, width, height, bytesPerLine, QImage.Format.Format_RGB888)
+        QPixmap.convertFromImage(self.colorPixmap, convertedImg)
+        # Set colorPreview to filtered pixmap
+        self.colorPreview.setPixmap(self.colorPixmap)
+        print(f"Value: {value}")
+
     # --------------------------------------------------------------
     # Contrast Adjustment related functions
     # Contrast menu
@@ -121,17 +159,12 @@ class VisualMenu(QtWidgets.QWidget):
             self.contrastOptions.hide()
             self.isHiddenContrastCorrection = True
 
+    # --------------------------------------------------------------
+    # POI Highlighting related functions
     # POI menu
     def show_poi_menu(self):
-        menu = QtWidgets.QMenu()
-
-        disable_action = QAction("Disable Highlighting", self)
-        enable_action = QAction("Enable Highlighting", self)
-
-        menu.addAction(disable_action)
-        menu.addAction(enable_action)
-
-        self._show_menu_below_button(self.btnPOIHighlight, menu)
+        print("placeholder")
+        
 
 
 
