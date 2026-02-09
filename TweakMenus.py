@@ -15,8 +15,8 @@ import numpy
 import PIL
 from PyQt6.QtGui import QImage
 from overlay import OverlayManager
+#needed for magnifier functionality
 from magnifier import MagnifierWindow
-
 
 # ------------------------------------------------------------------------------
 # VisualMenu Class: 
@@ -32,8 +32,10 @@ class VisualMenu(QtWidgets.QWidget):
         super().__init__()
 
         # Load the UI file
-        ui_path = os.path.join(os.path.dirname(__file__), "ui files", "eg_visual_settings.ui")
+        base_dir = os.path.dirname(__file__)
+        ui_path = os.path.join(base_dir, "ui files", "eg_visual_settings.ui")
         uic.loadUi(ui_path, self)
+
 
         # Set window title and other initialization
         self.setWindowTitle('Visual Settings')
@@ -48,10 +50,12 @@ class VisualMenu(QtWidgets.QWidget):
             self.overlay = None
 
         # Loads the color preview dynamically
-        self.colorPixmap = QPixmap("ui files/Images/pigment.png")
+        pigment_path = os.path.join(base_dir, "ui files", "Images", "pigment.png")
+        self.colorPixmap = QPixmap(pigment_path)
         if self.colorPixmap.isNull():
             print("could not laod icon")
         self.colorPreview.setPixmap(self.colorPixmap)
+
         #self.iconLabel.setScaledContents(True)
 
         # ==============================
@@ -63,7 +67,7 @@ class VisualMenu(QtWidgets.QWidget):
         self.comboxColorBlindType.activated.connect(self.colorblind_type)
         self.isHiddenColorBlind = True
         self.colorblindType = "(None)"
-        self.colorFilter = cv2.imread("ui files/Images/pigment.png")
+        self.colorFilter = cv2.imread(pigment_path)
         self.colorFilter = cv2.cvtColor(self.colorFilter, cv2.COLOR_RGB2HSV)
         
         # contrast button connections
@@ -175,6 +179,7 @@ class VisualMenu(QtWidgets.QWidget):
     # --------------------------------------------------------------
     # POI Highlighting related functions
     # POI menu
+    # --------------------------------------------------------------
     def show_poi_menu(self):
         if self.isHiddenPoiMenu:
             self.poiOptions.show()
@@ -182,7 +187,7 @@ class VisualMenu(QtWidgets.QWidget):
         else:
             self.poiOptions.hide()
             self.isHiddenPoiMenu = True
-
+    #magnifier toggle
     def toggle_poi_magnifier(self, enabled):
         if enabled:
             if self.magnifier is None:
@@ -358,10 +363,15 @@ class PhysMenu(QtWidgets.QWidget):
         super().__init__()
 
         # load the ui file for physical menu
-        uic.loadUi('ui files/eg_physical_settings.ui', self)
+        base_dir = os.path.dirname(__file__)
+        ui_path = os.path.join(base_dir, "ui files", "eg_physical_settings.ui")
+        uic.loadUi(ui_path, self)
         self.setWindowTitle('Physical Settings')
 
-        pixmap = QPixmap("ui files/Images/physicaldisability.png")
+        primary_icon = os.path.join(base_dir, "ui files", "Images", "physicaldisability.png")
+        fallback_icon = os.path.join(base_dir, "ui files", "Images", "Controller.png")
+        icon_path = primary_icon if os.path.exists(primary_icon) else fallback_icon
+        pixmap = QPixmap(icon_path)
         if pixmap.isNull():
             print("could not load icon")
 

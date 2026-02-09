@@ -21,17 +21,20 @@ class MainMenu(QtWidgets.QWidget):
     # Initialization for ui file and connecting buttons to functions
     def __init__(self):
         super().__init__()
-        
+
         # Loads the UI file and sets the window title
-        uic.loadUi('ui files/eg_main_menu.ui', self)
+        base_dir = os.path.dirname(__file__)
+        ui_path = os.path.join(base_dir, "ui files", "eg_main_menu.ui")
+        uic.loadUi(ui_path, self)
         self.setWindowTitle('Enable Games')
 
         # Loads the icon dynamically
-        pixmap = QPixmap("ui files/Images/Controller.png")
+        img_path = os.path.join(base_dir, "ui files", "Images", "Controller.png")
+        pixmap = QPixmap(img_path)
         if pixmap.isNull():
             print("could not laod icon")
         self.iconLabel.setPixmap(pixmap)
-        #self.iconLabel.setScaledContents(True)
+        self.iconLabel.setScaledContents(True)
 
         # Connections of button click events to specific functions
         self.btnVisTweaks.clicked.connect(self.visTweaks_clicked)
