@@ -202,13 +202,13 @@
          </property>
          <property name="styleSheet">
           <string notr="true">
-            #btnBackToPreset {
+            #btnBack {
                 border: none;
                 background: transparent;
                 text-align: left;
                 padding: 6px 0px;
             }
-            #btnBackToPreset:hover {
+            #btnBack:hover {
                 text-decoration: underline;
             }
           </string>
