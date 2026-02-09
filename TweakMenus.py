@@ -15,6 +15,8 @@ import numpy
 import PIL
 from PyQt6.QtGui import QImage
 from overlay import OverlayManager
+from magnifier import MagnifierWindow
+
 
 # ------------------------------------------------------------------------------
 # VisualMenu Class: 
@@ -101,17 +103,6 @@ class VisualMenu(QtWidgets.QWidget):
             except Exception:
                 pass
 
-    def toggle_magnifier(self, enabled: bool):
-        if enabled:
-            if self.magnifier is None:
-                self.magnifier = MagnifierWindow(zoom=2.0, size=180)
-            self.magnifier.start()
-        else:
-            if self.magnifier is not None:
-                self.magnifier.stop()
-
-
-
     # back button, returns to main menu
     def back(self):
         try:
@@ -181,7 +172,6 @@ class VisualMenu(QtWidgets.QWidget):
             self.contrastOptions.hide()
             self.isHiddenContrastCorrection = True
 
-
     # --------------------------------------------------------------
     # POI Highlighting related functions
     # POI menu
@@ -194,11 +184,20 @@ class VisualMenu(QtWidgets.QWidget):
             self.isHiddenPoiMenu = True
 
     def toggle_poi_magnifier(self, enabled):
-        state = "enabled" if enabled else "disabled"
-        print(f"Magnifier {state}")
+        if enabled:
+            if self.magnifier is None:
+                self.magnifier = MagnifierWindow(zoom=float(self.sldPoiZoom.value()), size=180)
+            else:
+                self.magnifier.set_zoom(float(self.sldPoiZoom.value()))
+            self.magnifier.start()
+        else:
+            if self.magnifier is not None:
+                self.magnifier.stop()
 
     def update_poi_zoom_label(self, value):
         self.labelPoiZoomValue.setText(f"{value}x")
+        if self.magnifier is not None:
+            self.magnifier.set_zoom(float(value))
 
 
 
