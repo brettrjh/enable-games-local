@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>694</width>
-    <height>544</height>
+    <width>690</width>
+    <height>579</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,7 +50,7 @@
           <property name="bottomMargin">
            <number>16</number>
           </property>
-          <item alignment="Qt::AlignHCenter">
+          <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
            <widget class="QLabel" name="iconLabel">
             <property name="minimumSize">
              <size>
@@ -84,7 +84,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QLabel" name="titleLabel">
             <property name="maximumSize">
              <size>
@@ -106,7 +106,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QLabel" name="subtitleLabel">
             <property name="maximumSize">
              <size>
@@ -115,7 +115,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Display settings</string>
+             <string>Audio settings</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -150,7 +150,7 @@ text-align: left;
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QWidget" name="subtitleOptions" native="true">
             <property name="enabled">
              <bool>true</bool>
@@ -328,7 +328,7 @@ text-align: left;
             </layout>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="btnDynRange">
             <property name="styleSheet">
              <string notr="true">QPushButton{
@@ -342,7 +342,43 @@ text-align: left;
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
+           <widget class="QWidget" name="dynrangeOptions" native="true">
+            <layout class="QGridLayout" name="drOptions">
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="gridLayout_5">
+               <item row="3" column="0">
+                <widget class="QLabel" name="enableDR">
+                 <property name="text">
+                  <string>Range Level</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QComboBox" name="cmbRange">
+                 <item>
+                  <property name="text">
+                   <string>Medium</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Low (Compressed)</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>High (Wide)</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="btnEmpty">
             <property name="styleSheet">
              <string notr="true">QPushButton{
@@ -356,7 +392,7 @@ text-align: left;
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignVCenter">
            <widget class="QFrame" name="frame">
             <property name="frameShape">
              <enum>QFrame::HLine</enum>
@@ -366,7 +402,7 @@ text-align: left;
             </property>
            </widget>
           </item>
-          <item alignment="Qt::AlignLeft">
+          <item alignment="Qt::AlignVCenter">
            <widget class="QPushButton" name="btnBack">
             <property name="enabled">
              <bool>true</bool>
@@ -403,8 +439,6 @@ text-align: left;
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
