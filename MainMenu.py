@@ -22,12 +22,16 @@ class MainMenu(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         
+        baseDir = os.path.dirname(__file__)
+
         # Loads the UI file and sets the window title
-        uic.loadUi('ui files/eg_main_menu.ui', self)
+        ui_path = os.path.join(baseDir, "ui files", "eg_main_menu.ui")
+        uic.loadUi(ui_path, self)
         self.setWindowTitle('Enable Games')
 
         # Loads the icon dynamically
-        pixmap = QPixmap("ui files/Images/Controller.png")
+        img_path = os.path.join(baseDir, "ui files", "Images", "Controller.png")
+        pixmap = QPixmap(img_path)
         if pixmap.isNull():
             print("could not laod icon")
         self.iconLabel.setPixmap(pixmap)
@@ -83,9 +87,9 @@ class MainMenu(QtWidgets.QWidget):
 # Temporary Script Execution (for testing purposes)
 # ---------------------------------------------------------------------------------
 #if __name__ == "__main__":
-#    import sys
-#
+#     import sys
+
 #    app = QtWidgets.QApplication(sys.argv)  # Create the application
-#    mainW = MainMenu()                      # Create an instance of the MainMenu class
+ #   mainW = MainMenu()                      # Create an instance of the MainMenu class
 #    mainW.show()                            # Show the main menu
 #    sys.exit(app.exec())                    # Run the application's event loop

@@ -38,7 +38,7 @@ class PresetMenu(QtWidgets.QWidget):
         self.btnFilter.clicked.connect(self.on_btnFilter_click)
         self.btnPresetToggle.clicked.connect(self.on_btnPresetToggle_click)
         self.btnDownloads.clicked.connect(self.on_btnDownloads_click)
-        self.btnBackToMain.clicked.connect(self.on_btnBackToMain_click)
+        self.btnBack.clicked.connect(self.on_btnBackToMain_click)
 
     # ------------------------------------------------------------
     # Filter Options click Function:
@@ -117,7 +117,7 @@ class PresetDownload(QtWidgets.QWidget):
         self.btnPresetDownload.clicked.connect(self.on_btnPresetDownload_click)
         self.btnCreator.clicked.connect(self.on_btnCreator_click)
         self.btnReport.clicked.connect(self.on_btnReport_click)
-        self.btnBackToPreset.clicked.connect(self.on_btnBackToPreset_click)
+        self.btnBack.clicked.connect(self.on_btnBackToPreset_click)
 
     # ------------------------------------------------------------
     # Preset Download click Function:
