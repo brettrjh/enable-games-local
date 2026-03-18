@@ -1,6 +1,7 @@
 import os
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtGui import QPixmap
+from navigation import switch_window
 
 # ------------------------------------------------------------------------------
 # PresetMenu Class: 
@@ -53,9 +54,7 @@ class PresetMenu(QtWidgets.QWidget):
     # - called when the given button is clicked
     def on_btnDownloads_click(self):
         try:
-            self.downloadW = PresetDownload()
-            self.downloadW.show()
-            self.close()
+            switch_window(self, PresetDownload())
         except Exception as e:
             print(f"error: {e}")
             import traceback
@@ -71,11 +70,9 @@ class PresetMenu(QtWidgets.QWidget):
             from MainMenu import MainMenu
 
             print('creating main menu...')
-            self.mainW = MainMenu()
             print('showing main menu...')
-            self.mainW.show()
+            switch_window(self, MainMenu())
             print('closing audio menu...')
-            self.close()
             print('done!')
         except Exception as e:
             print(f"error: {e}")
@@ -141,9 +138,7 @@ class PresetDownload(QtWidgets.QWidget):
     # - called when the given button is clicked
     def on_btnBackToPreset_click(self):
         try:
-            self.presetW = PresetMenu()
-            self.presetW.show()
-            self.close()
+            switch_window(self, PresetMenu())
         except Exception as e:
             print(f"error: {e}")
             import traceback

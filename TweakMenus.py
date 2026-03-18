@@ -20,6 +20,7 @@ from PyQt6.QtGui import QImage
 from overlay import OverlayManager
 #needed for magnifier functionality
 from magnifier import MagnifierWindow
+from navigation import switch_window
 
 
 def get_or_create_overlay_manager():
@@ -135,11 +136,9 @@ class VisualMenu(QtWidgets.QWidget):
             from MainMenu import MainMenu
 
             print('creating main menu...')
-            self.mainW = MainMenu()
             print('showing main menu...')
-            self.mainW.show()
+            switch_window(self, MainMenu())
             print('closing visual menu...')
-            self.close()
             print('done!')
         except Exception as e:
             print(f"error: {e}")
@@ -627,11 +626,9 @@ class AudioMenu(QtWidgets.QWidget):
             from MainMenu import MainMenu
 
             print('creating main menu...')
-            self.mainW = MainMenu()
             print('showing main menu...')
-            self.mainW.show()
+            switch_window(self, MainMenu())
             print('closing audio menu...')
-            self.close()
             print('done!')
         except Exception as e:
             print(f"error: {e}")
@@ -682,11 +679,9 @@ class PhysMenu(QtWidgets.QWidget):
             from MainMenu import MainMenu
 
             print('creating main menu...')
-            self.mainW = MainMenu()
             print('showing main menu...')
-            self.mainW.show()
+            switch_window(self, MainMenu())
             print('closing physical menu...')
-            self.close()
             print('done!')
         except Exception as e:
             print(f"error: {e}")
