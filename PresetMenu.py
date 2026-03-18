@@ -2,10 +2,6 @@ import os
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtGui import QPixmap
 
-# needed for connectivity/opening the main menu
-import MainMenu
-
-
 # ------------------------------------------------------------------------------
 # PresetMenu Class: 
 # - inherits from the QWidget
@@ -72,8 +68,10 @@ class PresetMenu(QtWidgets.QWidget):
         # return to main menu
         print("Back to main button clicked")
         try:
+            from MainMenu import MainMenu
+
             print('creating main menu...')
-            self.mainW = MainMenu.MainMenu()
+            self.mainW = MainMenu()
             print('showing main menu...')
             self.mainW.show()
             print('closing audio menu...')
