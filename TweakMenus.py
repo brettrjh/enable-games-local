@@ -12,9 +12,6 @@ from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
 from PyQt6.QtCore import QUrl
 #------------------------------------------------------
 
-# needed for connectivity/opening the main menu
-import MainMenu
-
 # needed for color / contrast correction
 import cv2
 import numpy
@@ -133,8 +130,10 @@ class VisualMenu(QtWidgets.QWidget):
     # back button, returns to main menu
     def back(self):
         try:
+            from MainMenu import MainMenu
+
             print('creating main menu...')
-            self.mainW = MainMenu.MainMenu()
+            self.mainW = MainMenu()
             print('showing main menu...')
             self.mainW.show()
             print('closing visual menu...')
@@ -618,8 +617,10 @@ class AudioMenu(QtWidgets.QWidget):
     def back_clicked(self):
         print("Back to main menu!")
         try:
+            from MainMenu import MainMenu
+
             print('creating main menu...')
-            self.mainW = MainMenu.MainMenu()
+            self.mainW = MainMenu()
             print('showing main menu...')
             self.mainW.show()
             print('closing audio menu...')
@@ -671,8 +672,10 @@ class PhysMenu(QtWidgets.QWidget):
 
         # opening main menu window debugging
         try:
+            from MainMenu import MainMenu
+
             print('creating main menu...')
-            self.mainW = MainMenu.MainMenu()
+            self.mainW = MainMenu()
             print('showing main menu...')
             self.mainW.show()
             print('closing physical menu...')
