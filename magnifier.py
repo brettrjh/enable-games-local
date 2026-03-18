@@ -8,7 +8,6 @@ class MagnifierWindow(QtWidgets.QWidget):
         flags = (
             Qt.WindowType.FramelessWindowHint
             | Qt.WindowType.WindowStaysOnTopHint
-            | Qt.WindowType.Tool
         )
         super().__init__(None, flags)
         self.zoom = max(1.0, float(zoom))

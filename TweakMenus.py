@@ -98,11 +98,11 @@ class VisualMenu(QtWidgets.QWidget):
         # ===================================
             # POI button connections
         self.btnPOIHighlight.clicked.connect(self.show_poi_menu)
+        self.magnifier = self.get_magnifier()
         self.chkPoiMagnifier.toggled.connect(self.toggle_poi_magnifier)
-        self.magnifier = None
         self.sldPoiZoom.valueChanged.connect(self.update_poi_zoom_label)
         self.isHiddenPoiMenu = True
-        self.update_poi_zoom_label(self.sldPoiZoom.value())
+        self.load_poi_magnifier_state()
         
         # Back to main menu button
         self.btnBack.clicked.connect(self.back)
@@ -362,27 +362,51 @@ class VisualMenu(QtWidgets.QWidget):
             self.poiOptions.hide()
             self.isHiddenPoiMenu = True
     
-    # magnifier close 
-    def closeEvent(self, event):
-        if self.magnifier is not None:
-            self.magnifier.stop()
-        super().closeEvent(event)
-                                   
+    def get_magnifier(self):
+        app = QtWidgets.QApplication.instance()
+        magnifier = getattr(app, 'poi_magnifier', None)
+        if magnifier is None:
+            magnifier = MagnifierWindow(zoom=2.0, size=180)
+            app.poi_magnifier = magnifier
+            app.poi_magnifier_enabled = False
+            app.poi_magnifier_zoom = 2.0
+        return magnifier
+
+    def load_poi_magnifier_state(self):
+        app = QtWidgets.QApplication.instance()
+        enabled = bool(getattr(app, 'poi_magnifier_enabled', False))
+        zoom = float(getattr(app, 'poi_magnifier_zoom', self.sldPoiZoom.value()))
+
+        self.chkPoiMagnifier.blockSignals(True)
+        self.chkPoiMagnifier.setChecked(enabled)
+        self.chkPoiMagnifier.blockSignals(False)
+
+        self.sldPoiZoom.blockSignals(True)
+        self.sldPoiZoom.setValue(int(zoom))
+        self.sldPoiZoom.blockSignals(False)
+        self.update_poi_zoom_label(int(zoom))
+
+        if enabled:
+            self.magnifier.start()
+
     # magnifier toggle
     def toggle_poi_magnifier(self, enabled):
+        app = QtWidgets.QApplication.instance()
+        app.poi_magnifier_enabled = enabled
+        app.poi_magnifier_zoom = float(self.sldPoiZoom.value())
+
         if enabled:
-            if self.magnifier is None:
-                self.magnifier = MagnifierWindow(zoom=float(self.sldPoiZoom.value()), size=180)
-            else:
-                self.magnifier.set_zoom(float(self.sldPoiZoom.value()))
+            self.magnifier.set_zoom(app.poi_magnifier_zoom)
             self.magnifier.start()
         else:
-            if self.magnifier is not None:
-                self.magnifier.stop()
+            self.magnifier.stop()
     
     # zoom update
     def update_poi_zoom_label(self, value):
         self.labelPoiZoomValue.setText(f"{value}x")
+        app = QtWidgets.QApplication.instance()
+        if app is not None:
+            app.poi_magnifier_zoom = float(value)
         if self.magnifier is not None:
             self.magnifier.set_zoom(float(value))
 
