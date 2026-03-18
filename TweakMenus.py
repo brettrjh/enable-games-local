@@ -21,6 +21,18 @@ from overlay import OverlayManager
 #needed for magnifier functionality
 from magnifier import MagnifierWindow
 
+
+def get_or_create_overlay_manager():
+    app = QtWidgets.QApplication.instance()
+    if app is None:
+        return None
+
+    overlay_manager = getattr(app, "overlay_manager", None)
+    if overlay_manager is None:
+        overlay_manager = OverlayManager(app)
+        app.overlay_manager = overlay_manager
+    return overlay_manager
+
 # ------------------------------------------------------------------------------
 # VisualMenu Class: 
 # - inherits from the QWidget
@@ -47,7 +59,7 @@ class VisualMenu(QtWidgets.QWidget):
 
         # overlay manager (controls full-screen overlays on all screens)
         try:
-            self.overlay = OverlayManager(QtWidgets.QApplication.instance())
+            self.overlay = get_or_create_overlay_manager()
         except Exception:
             self.overlay = None
 
@@ -69,7 +81,9 @@ class VisualMenu(QtWidgets.QWidget):
         self.isHiddenColorBlind = True
         self.colorblindType = "(None)"
             # get preview image and convert to HSV
-        self.colorFilter = cv2.imread("ui files/Images/pigment.png")
+        self.colorFilter = cv2.imread(pigment_path)
+        if self.colorFilter is None:
+            raise FileNotFoundError(f"Could not load preview image: {pigment_path}")
         self.colorFilter = cv2.cvtColor(self.colorFilter, cv2.COLOR_BGR2HSV)
             # used for working with the contrast correction, updated in the Colorblind Intensity function
         #self.hueValue = (self.colorFilter[:,:,0])
@@ -82,10 +96,12 @@ class VisualMenu(QtWidgets.QWidget):
         self.btnContrast.clicked.connect(self.show_contrast_menu)
         self.isHiddenContrastCorrection = True
             # min value of slider: 0  |  max value of slider: 100  |  default value: 50 (no change)
-        self.sliderContrastScreen.setValue = 50
+        self.sliderContrastScreen.setValue(50)
         self.sliderContrastScreen.valueChanged.connect(self.screen_contrast_correction)
             # get preview image and convert to hsv to change values (V)
-        self.contrastFilter = cv2.imread("ui files/Images/pigment.png")
+        self.contrastFilter = cv2.imread(pigment_path)
+        if self.contrastFilter is None:
+            raise FileNotFoundError(f"Could not load preview image: {pigment_path}")
         self.contrastFilter = cv2.cvtColor(self.contrastFilter, cv2.COLOR_BGR2HSV)
             # used for working with the colorblind correction, updated in the Screen Contrast Corretion function
         self.contrastValue = self.contrastFilter[:,:,2]
@@ -108,24 +124,10 @@ class VisualMenu(QtWidgets.QWidget):
         # Overlay Connections
         # ==============================
         # connect overlay-related controls if overlay manager created
-        #if getattr(self, 'overlay', None):
-            # screen contrast slider -> overlay brightness
-            #try:
-            #    self.sliderContrastScreen.valueChanged.connect(self.overlay.set_brightness_from_slider)
-            #except Exception:
-            #    pass
-
-            # colorblind selection -> overlay type
-            # try:
-            #    self.comboxColorBlindType.currentTextChanged.connect(self.overlay.set_colorblind_type)
-            #except Exception:
-            #    pass
-
-            # colorblind intensity slider -> overlay intensity
-            #try:
-            #    self.slideColorBlindIntensity.valueChanged.connect(self.overlay.set_colorblind_intensity)
-            #except Exception:
-            #    pass
+        if self.overlay is not None:
+            self.sliderContrastScreen.valueChanged.connect(self.overlay.set_brightness_from_slider)
+            self.comboxColorBlindType.currentTextChanged.connect(self.overlay.set_colorblind_type)
+            self.slideColorBlindIntensity.valueChanged.connect(self.overlay.set_colorblind_intensity)
 
     # back button, returns to main menu
     def back(self):
@@ -208,7 +210,7 @@ class VisualMenu(QtWidgets.QWidget):
             # will increase the hue range and increase the saturation of the range for a stronger correction. 
 
         # -- low slider value will shrink the HSV range, high value will increase the range
-        if (self.colorblindType == "None"):
+        if self.colorblindType in {"None", "(None)"}:
             # no colorblindness type selected
             newSat = saturation
         
@@ -425,7 +427,7 @@ class AudioMenu(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         # overlay manager for subtitle preview
-        self.overlay_manager = QtWidgets.QApplication.instance().overlay_manager
+        self.overlay_manager = get_or_create_overlay_manager()
         
         # Loads the UI file and sets the window title
         baseDir = os.path.dirname(__file__)
@@ -441,6 +443,10 @@ class AudioMenu(QtWidgets.QWidget):
             print("could not laod icon")
         self.iconLabel.setPixmap(pixmap)
         self.iconLabel.setScaledContents(True)
+
+        self.audio_output = QAudioOutput(self)
+        self.player = QMediaPlayer(self)
+        self.player.setAudioOutput(self.audio_output)
 
         # ==================================
         # Subtitles Variables / Connections
@@ -540,14 +546,15 @@ class AudioMenu(QtWidgets.QWidget):
         self.lblSubtitlePreview.setFont(font)
         # Update the actual overlay settings
         settings = self._settings_from_ui()
-        self.overlay_manager.set_subtitle_settings(settings)
-        self.overlay_manager.set_subtitle_text("Overlay test subtitle\n(next: OCR will replace this)")
-        if settings.enabled:
-            self.overlay_manager.attach_to_window_title("Skyrim")  # Example game title, replace with actual target
-            self.overlay_manager.start_ocr()
-        else:
-            self.overlay_manager.stop_ocr()
-            self.overlay_manager.detach_window()
+        if self.overlay_manager is not None:
+            self.overlay_manager.set_subtitle_settings(settings)
+            self.overlay_manager.set_subtitle_text("Overlay test subtitle\n(next: OCR will replace this)")
+            if settings.enabled:
+                self.overlay_manager.attach_to_window_title("Skyrim")  # Example game title, replace with actual target
+                self.overlay_manager.start_ocr()
+            else:
+                self.overlay_manager.stop_ocr()
+                self.overlay_manager.detach_window()
     # ------------------------------------------------------------
     # Function to create settings dataclass from UI for easy passing to overlay
     def _settings_from_ui(self):
