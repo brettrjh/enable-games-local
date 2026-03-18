@@ -13,8 +13,10 @@ if __name__ == "__main__":
     # ----------------------------------------------
     # Initialization & Variable Dictionary
     app = QtWidgets.QApplication(sys.argv)  # Create the application
+    app.setQuitOnLastWindowClosed(False)
     app.overlay_manager = OverlayManager(app)
     menuW = MainMenu()                      # Create an instance of the MainWindow class
+    app.current_window = menuW
     menuW.show()                            # Show the main window
     sys.exit(app.exec())                    # Run the application's event loop
 

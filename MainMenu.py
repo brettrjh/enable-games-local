@@ -8,6 +8,7 @@ from PyQt6.QtGui import QAction
 
 from TweakMenus import VisualMenu, AudioMenu, PhysMenu
 from PresetMenu import PresetMenu
+from navigation import switch_window
 
 
 # ------------------------------------------------------------------------------
@@ -49,36 +50,28 @@ class MainMenu(QtWidgets.QWidget):
 
     def visTweaks_clicked(self):
         print("Visual Tweaks button clicked!")
-        self.visualW = VisualMenu()
-        self.visualW.show()
-        self.close()
+        switch_window(self, VisualMenu())
 
     # ------------------------------------------------------------
     # audTweaks Function:
     # - called when the Audio Tweaks button is clicked
     def audTweaks_clicked(self):
         print("Audio Tweaks button clicked!")
-        self.audioW = AudioMenu()
-        self.audioW.show()
-        self.close()
+        switch_window(self, AudioMenu())
 
     # ------------------------------------------------------------
     # physTweaks Function:
     # - called when the Physical Tweaks button is clicked
     def physTweaks_clicked(self):
         print("Physical Tweaks button clicked!")
-        self.physicalW = PhysMenu()
-        self.physicalW.show()
-        self.close()
+        switch_window(self, PhysMenu())
 
     # ------------------------------------------------------------
     # presMenu Function:
     # - called when the Preset Menu button is clicked
     def presMenu_clicked(self):
         print("Preset Menu button clicked!")
-        self.presetW = PresetMenu()
-        self.presetW.show()
-        self.close()
+        switch_window(self, PresetMenu())
 
 
 
