@@ -14,6 +14,7 @@ from window_tracker import list_open_window_titles
 
 from cognito_auth import CognitoAuth
 import webbrowser
+from theme import apply_standard_control_sizing, set_button_variant
 
 
 # ------------------------------------------------------------------------------
@@ -37,6 +38,8 @@ class MainMenu(QtWidgets.QWidget):
         ui_path = os.path.join(baseDir, "ui files", "eg_main_menu.ui")
         uic.loadUi(ui_path, self)
         self.setWindowTitle('Enable Games')
+        self.resize(900, 700)
+        apply_standard_control_sizing(self)
 
         # Loads the icon dynamically
         img_path = os.path.join(baseDir, "ui files", "Images", "Controller.png")
@@ -51,6 +54,10 @@ class MainMenu(QtWidgets.QWidget):
         self.btnAudTweaks.clicked.connect(self.audTweaks_clicked)
         self.btnPhysTweaks.clicked.connect(self.physTweaks_clicked)
         self.btnPresMenu.clicked.connect(self.presMenu_clicked)
+        set_button_variant(self.btnVisTweaks, "primary")
+        set_button_variant(self.btnAudTweaks, "secondary")
+        set_button_variant(self.btnPhysTweaks, "secondary")
+        set_button_variant(self.btnPresMenu, "secondary")
 
         self.auth = CognitoAuth()
 
@@ -60,6 +67,8 @@ class MainMenu(QtWidgets.QWidget):
         # Connections for game selection and refresh
         self.btnRefreshWindows.clicked.connect(self.refresh_window_list)
         self.btnApplySettings.clicked.connect(self.attach_selected_window)
+        if hasattr(self, "btnApplySettings"):
+            set_button_variant(self.btnApplySettings, "primary")
 
         # Connections for saving settings
         # === CONNECTIONS FOR SAVING TO DATABASE GO HERE !!! ===

@@ -2,8 +2,10 @@ from PyQt6.QtWidgets import QApplication
 from MainMenu import MainMenu
 from overlay import OverlayManager
 from login_window import LoginWindow
+from theme import APP_STYLESHEET
 
 app = QApplication([])
+app.setStyleSheet(APP_STYLESHEET)
 
 app.overlay_manager = OverlayManager(app)
 
