@@ -43,14 +43,6 @@
     </property>
     <item>
      <widget class="QFrame" name="frameCard">
-      <property name="styleSheet">
-       <string notr="true">#frameCard {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-}
-</string>
-      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -96,40 +88,6 @@
             <height>40</height>
            </size>
           </property>
-          <property name="styleSheet">
-           <string notr="true" />
-          </property>
-          <property name="text">
-           <string />
-          </property>
-          <property name="pixmap">
-           <pixmap>:/icons/assets/icons/eye.png</pixmap>
-          </property>
-          <property name="scaledContents">
-           <bool>true</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="titleLabel">
-          <property name="maximumSize">
-           <size>
-            <width>600</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>16</pointsize>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Visual Tweaks</string>
-          </property>
           <property name="alignment">
            <set>Qt::AlignHCenter|Qt::AlignTop</set>
           </property>
@@ -164,12 +122,6 @@
             <width>389</width>
             <height>16777215</height>
            </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-text-align: left;
-}
-</string>
           </property>
           <property name="text">
            <string>Colorblind Correction</string>
@@ -267,13 +219,6 @@ text-align: left;
         </item>
         <item>
          <widget class="QPushButton" name="btnContrast">
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-text-align: left;
-}
-
-</string>
-          </property>
           <property name="text">
            <string>Contrast</string>
           </property>
@@ -281,13 +226,6 @@ text-align: left;
         </item>
         <item>
          <widget class="QPushButton" name="btnPOIHighlight">
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-text-align: left;
-}
-
-</string>
-          </property>
           <property name="text">
            <string>POI Highlighting</string>
           </property>
@@ -379,18 +317,6 @@ text-align: left;
          <widget class="QPushButton" name="btnBack">
           <property name="enabled">
            <bool>true</bool>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">#btnBack {
-  border: none;
-  background: transparent;
-  text-align: left;
-  padding: 6px 0px;
-}
-#btnBack:hover {
-  text-decoration: underline;
-}
-</string>
           </property>
           <property name="text">
            <string>← Back to Main Menu</string>

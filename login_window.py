@@ -6,6 +6,7 @@ from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QLabel, QMessageBox
 
 from cognito_auth import CognitoAuth
+from theme import BUTTON_HEIGHT, SPACING_MD, WINDOW_SIZE, set_button_variant
 
 
 class LoginWindow(QWidget):
@@ -22,17 +23,20 @@ class LoginWindow(QWidget):
         self.pending_code_verifier = None
 
         self.setWindowTitle("Enable Games Login")
-        self.resize(400, 180)
+        self.resize(min(420, WINDOW_SIZE.width()), 180)
 
         self.status_label = QLabel("Not signed in")
         self.login_button = QPushButton("Sign in with Cognito")
+        self.login_button.setMinimumHeight(BUTTON_HEIGHT)
         self.login_button.clicked.connect(self.start_login)
+        set_button_variant(self.login_button, "primary")
 
         
 
        
 
         layout = QVBoxLayout()
+        layout.setSpacing(SPACING_MD)
         layout.addWidget(self.status_label)
         layout.addWidget(self.login_button)
         self.setLayout(layout)

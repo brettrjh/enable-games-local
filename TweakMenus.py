@@ -31,6 +31,7 @@ from overlay import OverlayManager
 from window_tracker import find_window_by_title_contains, get_window_rect, list_open_window_titles
 #needed for magnifier functionality
 from magnifier import MagnifierWindow
+from theme import apply_standard_control_sizing, set_button_variant
 
 #-------------------------------------------------------------------------------
 DEFAULT_SETTINGS = {
@@ -89,6 +90,8 @@ class VisualMenu(QtWidgets.QWidget):
         base_dir = os.path.dirname(__file__)
         ui_path = os.path.join(base_dir, "ui files", "eg_visual_settings.ui")
         uic.loadUi(ui_path, self)
+        self.resize(900, 700)
+        apply_standard_control_sizing(self)
 
         self.settings_manager = SettingsManager()
 
@@ -186,6 +189,10 @@ class VisualMenu(QtWidgets.QWidget):
         
         # Back to main menu button
         self.btnBack.clicked.connect(self.back)
+        set_button_variant(self.btnColorblind, "primary")
+        set_button_variant(self.btnContrast, "secondary")
+        set_button_variant(self.btnPOIHighlight, "secondary")
+        set_button_variant(self.btnBack, "back")
 
         # ==============================
         # Overlay Connections
@@ -532,6 +539,8 @@ class AudioMenu(QtWidgets.QWidget):
         baseDir = os.path.dirname(__file__)
         ui_path = os.path.join(baseDir, "ui files", "eg_audio_settings.ui")
         uic.loadUi(ui_path, self)
+        self.resize(900, 700)
+        apply_standard_control_sizing(self)
 
         self.settings_manager = SettingsManager()
 
@@ -582,6 +591,10 @@ class AudioMenu(QtWidgets.QWidget):
         self.cmbRange.currentIndexChanged.connect(self.set_dynamic_range)
 
         self.btnBack.clicked.connect(self.back_clicked)
+        set_button_variant(self.btnSubtitles, "primary")
+        set_button_variant(self.btnDynRange, "secondary")
+        set_button_variant(self.btnEmpty, "secondary")
+        set_button_variant(self.btnBack, "back")
 
         self.btnSaveDynJson.clicked.connect(self.save_audio_settings)
         self.btnLoadDynJson.clicked.connect(self.load_audio_settings)
@@ -885,6 +898,8 @@ class PhysMenu(QtWidgets.QWidget):
         ui_path = os.path.join(base_dir, "ui files", "eg_physical_settings.ui")
         uic.loadUi(ui_path, self)
         self.setWindowTitle('Physical Settings')
+        self.resize(900, 700)
+        apply_standard_control_sizing(self)
 
         primary_icon = os.path.join(base_dir, "ui files", "Images", "physicaldisability.png")
         fallback_icon = os.path.join(base_dir, "ui files", "Images", "Controller.png")
@@ -900,6 +915,9 @@ class PhysMenu(QtWidgets.QWidget):
         self.btnBack.clicked.connect(self.main_button_clicked)
         self.controlsPB.clicked.connect(self.controls_button_clicked)
         self.autofirePB.clicked.connect(self.autofire_button_clicked)
+        set_button_variant(self.controlsPB, "primary")
+        set_button_variant(self.autofirePB, "secondary")
+        set_button_variant(self.btnBack, "back")
 
     # called when main menu button clicked, opens main menu
     def main_button_clicked(self):

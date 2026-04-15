@@ -37,14 +37,6 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QFrame" name="frameCard">
-      <property name="styleSheet">
-       <string notr="true">#frameCard {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-}
-</string>
-      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -89,40 +81,6 @@
             <width>75</width>
             <height>60</height>
            </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true" />
-          </property>
-          <property name="text">
-           <string />
-          </property>
-          <property name="pixmap">
-           <pixmap>:Images/Sound.png</pixmap>
-          </property>
-          <property name="scaledContents">
-           <bool>true</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="titleLabel">
-          <property name="maximumSize">
-           <size>
-            <width>600</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>16</pointsize>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Main Menu</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignHCenter|Qt::AlignTop</set>
