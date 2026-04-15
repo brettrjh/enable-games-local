@@ -1,22 +1,24 @@
-
-from PyQt6 import QtWidgets, uic
+from PyQt6.QtWidgets import QApplication
 from MainMenu import MainMenu
 from overlay import OverlayManager
+from login_window import LoginWindow
 
+app = QApplication([])
 
-# ---------------------------------------------------------------------------------
-# Script Execution
-# ---------------------------------------------------------------------------------
-if __name__ == "__main__":
-    import sys
+app.overlay_manager = OverlayManager(app)
 
-    # ----------------------------------------------
-    # Initialization & Variable Dictionary
-    app = QtWidgets.QApplication(sys.argv)  # Create the application
-    app.setQuitOnLastWindowClosed(False)
-    app.overlay_manager = OverlayManager(app)
-    menuW = MainMenu()                      # Create an instance of the MainWindow class
-    app.current_window = menuW
-    menuW.show()                            # Show the main window
-    sys.exit(app.exec())                    # Run the application's event loop
+main_menu = MainMenu()
+main_menu.hide()
 
+def handle_login_success(tokens):
+    login_window.hide()
+    main_menu.show()
+
+login_window = LoginWindow(on_login_success=handle_login_success)
+login_window.show()
+
+# make both windows reachable from the app
+app.login_window = login_window
+app.main_menu = main_menu
+
+app.exec()

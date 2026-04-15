@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "features": {
+    "audio": {
+      "dynamicRange": {
+        "enabled": true,
+        "level": "Low (Compressed)"
+      },
+      "subtitles": {
+        "enabled": true,
+        "color": "Red",
+        "position": "Top",
+        "background": true,
+        "bg_opacity": 20,
+        "font_size": 8
+      }
+    },
+    "visual": {
+      "colorblind": {
+        "enabled": true,
+        "type": "Deuteranomaly",
+        "slider": 14
+      },
+      "contrast": {
+        "enabled": true,
+        "slider": 30
+      },
+      "poi": {
+        "magnifier_enabled": true,
+        "zoom": 3
+      }
+    }
+  }
+}

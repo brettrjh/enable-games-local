@@ -1,7 +1,16 @@
 import os
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtGui import QPixmap
-from navigation import switch_window
+from PyQt6.QtWidgets import QFileDialog, QMessageBox
+import shutil
+
+import webbrowser
+
+
+
+# needed for connectivity/opening the main menu
+import MainMenu
+
 
 # ------------------------------------------------------------------------------
 # PresetMenu Class: 
@@ -32,9 +41,14 @@ class PresetMenu(QtWidgets.QWidget):
         self.lblImage.setScaledContents(True)
 
         # Connections of button click events to specific functions
-        self.btnFilter.clicked.connect(self.on_btnFilter_click)
-        self.btnPresetToggle.clicked.connect(self.on_btnPresetToggle_click)
-        self.btnDownloads.clicked.connect(self.on_btnDownloads_click)
+
+        self.btnPostPreset.clicked.connect(self.open_post_page)
+        self.btnBrowsePresets.clicked.connect(self.open_browse_page)
+        self.btnImportPreset.clicked.connect(self.import_preset)
+        self.btnBack.clicked.connect(self.on_btnBackToMain_click)
+   
+        
+       
         self.btnBack.clicked.connect(self.on_btnBackToMain_click)
 
     # ------------------------------------------------------------
@@ -54,7 +68,9 @@ class PresetMenu(QtWidgets.QWidget):
     # - called when the given button is clicked
     def on_btnDownloads_click(self):
         try:
-            switch_window(self, PresetDownload())
+            self.downloadW = PresetDownload()
+            self.downloadW.show()
+            self.close()
         except Exception as e:
             print(f"error: {e}")
             import traceback
@@ -67,17 +83,49 @@ class PresetMenu(QtWidgets.QWidget):
         # return to main menu
         print("Back to main button clicked")
         try:
-            from MainMenu import MainMenu
-
             print('creating main menu...')
+            self.mainW = MainMenu.MainMenu()
             print('showing main menu...')
-            switch_window(self, MainMenu())
+            self.mainW.show()
             print('closing audio menu...')
+            self.close()
             print('done!')
         except Exception as e:
             print(f"error: {e}")
             import traceback
             traceback.print_exc()
+
+    def open_post_page(self):
+        webbrowser.open("http://enable-games-presets.s3-website.us-east-2.amazonaws.com/post.html")
+
+    def open_browse_page(self):
+        webbrowser.open("http://enable-games-presets.s3-website.us-east-2.amazonaws.com")
+
+    def import_preset(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Select Preset File",
+            "",
+            "JSON Files (*.json)"
+        )
+
+        if not file_path:
+            return
+
+        try:
+            shutil.copy(file_path, "enable_games_settings.json")
+
+            QMessageBox.information(
+                self,
+                "Preset Imported",
+                "Preset successfully imported! Open menus to apply settings."
+            )
+        except Exception as e:
+            QMessageBox.critical(
+                self,
+                "Error",
+                f"Failed to import preset:\n{e}"
+            )
 
 
 
@@ -98,6 +146,9 @@ class PresetDownload(QtWidgets.QWidget):
         # Loads the UI file and sets the window title
         ui_path = os.path.join(baseDir, "ui files", "eg_preset_download.ui") # add file name here
         uic.loadUi(ui_path, self)
+        
+
+       
         self.setWindowTitle('Preset Download')
 
         # Loads the icon dynamically
@@ -113,6 +164,37 @@ class PresetDownload(QtWidgets.QWidget):
         self.btnCreator.clicked.connect(self.on_btnCreator_click)
         self.btnReport.clicked.connect(self.on_btnReport_click)
         self.btnBack.clicked.connect(self.on_btnBackToPreset_click)
+
+    def open_post_page(self):
+        webbrowser.open("http://enable-games-presets.s3-website.us-east-2.amazonaws.com/post.html")
+
+    def open_browse_page(self):
+        webbrowser.open("http://enable-games-presets.s3-website.us-east-2.amazonaws.com")
+
+    def import_preset(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Select Preset File",
+            "",
+            "JSON Files (*.json)"
+        )
+
+        if not file_path:
+            return
+
+        try:
+            shutil.copy(file_path, "enable_games_settings.json")
+            QMessageBox.information(
+                self,
+                "Preset Imported",
+                "Preset successfully imported!"
+            )
+        except Exception as e:
+            QMessageBox.critical(
+                self,
+                "Error",
+                f"Failed to import preset:\n{e}"
+            )
 
     # ------------------------------------------------------------
     # Preset Download click Function:
@@ -138,7 +220,9 @@ class PresetDownload(QtWidgets.QWidget):
     # - called when the given button is clicked
     def on_btnBackToPreset_click(self):
         try:
-            switch_window(self, PresetMenu())
+            self.presetW = PresetMenu()
+            self.presetW.show()
+            self.close()
         except Exception as e:
             print(f"error: {e}")
             import traceback

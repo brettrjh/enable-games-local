@@ -8,7 +8,12 @@ from PyQt6.QtGui import QAction
 
 from TweakMenus import VisualMenu, AudioMenu, PhysMenu
 from PresetMenu import PresetMenu
-from navigation import switch_window
+
+from overlay import OverlayManager
+from window_tracker import list_open_window_titles
+
+from cognito_auth import CognitoAuth
+import webbrowser
 
 
 # ------------------------------------------------------------------------------
@@ -24,6 +29,9 @@ class MainMenu(QtWidgets.QWidget):
         super().__init__()
         
         baseDir = os.path.dirname(__file__)
+
+        # overlay manager for subtitle preview
+        self.overlay_manager = QtWidgets.QApplication.instance().overlay_manager
 
         # Loads the UI file and sets the window title
         ui_path = os.path.join(baseDir, "ui files", "eg_main_menu.ui")
@@ -44,45 +52,102 @@ class MainMenu(QtWidgets.QWidget):
         self.btnPhysTweaks.clicked.connect(self.physTweaks_clicked)
         self.btnPresMenu.clicked.connect(self.presMenu_clicked)
 
+        self.auth = CognitoAuth()
+
+        if hasattr(self, "btnLogout"):
+            self.btnLogout.clicked.connect(self.logout_clicked)
+
+        # Connections for game selection and refresh
+        self.btnRefreshWindows.clicked.connect(self.refresh_window_list)
+        self.btnApplySettings.clicked.connect(self.attach_selected_window)
+
+        # Connections for saving settings
+        # === CONNECTIONS FOR SAVING TO DATABASE GO HERE !!! ===
+
+        # Run once so it matches current default settings
+        self.refresh_window_list()
+
     # ------------------------------------------------------------
     # visTweaks Function:
     # - called when the Visual Tweaks button is clicked
 
     def visTweaks_clicked(self):
         print("Visual Tweaks button clicked!")
-        switch_window(self, VisualMenu())
+        self.visualW = VisualMenu()
+        self.visualW.show()
+        self.close()
 
     # ------------------------------------------------------------
     # audTweaks Function:
     # - called when the Audio Tweaks button is clicked
     def audTweaks_clicked(self):
         print("Audio Tweaks button clicked!")
-        switch_window(self, AudioMenu())
+        self.audioW = AudioMenu()
+        self.audioW.show()
+        self.close()
 
     # ------------------------------------------------------------
     # physTweaks Function:
     # - called when the Physical Tweaks button is clicked
     def physTweaks_clicked(self):
         print("Physical Tweaks button clicked!")
-        switch_window(self, PhysMenu())
+        self.physicalW = PhysMenu()
+        self.physicalW.show()
+        self.close()
 
     # ------------------------------------------------------------
     # presMenu Function:
     # - called when the Preset Menu button is clicked
     def presMenu_clicked(self):
         print("Preset Menu button clicked!")
-        switch_window(self, PresetMenu())
+        self.presetW = PresetMenu()
+        self.presetW.show()
+        self.close()
 
 
+    #-------------------------------------------------------------
+    # Function to Attach Window to Game selected
+    def attach_selected_window(self):
+        selected_title = self.cmbTargetWindow.currentText().strip()
+        if not selected_title:
+            print("[AudioMenu] No target window selected.")
+            return
+        
+        print(f"[AudioMenu] Attaching to selected window: {selected_title}")
+        self.overlay_manager.attach_to_window_title(selected_title)
 
+    # ------------------------------------------------------------
+    # Function to refesh Game list
+    def refresh_window_list(self):
+        self.cmbTargetWindow.clear()
 
-# ---------------------------------------------------------------------------------
-# Temporary Script Execution (for testing purposes)
-# ---------------------------------------------------------------------------------
-#if __name__ == "__main__":
-#     import sys
+        titles = list_open_window_titles()
 
-#    app = QtWidgets.QApplication(sys.argv)  # Create the application
- #   mainW = MainMenu()                      # Create an instance of the MainMenu class
-#    mainW.show()                            # Show the main menu
-#    sys.exit(app.exec())                    # Run the application's event loop
+        filtered_titles = []
+        ignore_contains = ["Program Manager", "Settings", "Task Switching"]
+
+        for title in titles:
+            if any(bad in title for bad in ignore_contains):
+                continue
+            filtered_titles.append(title)
+
+        self.cmbTargetWindow.addItems(filtered_titles)
+
+    def logout_clicked(self):
+        try:
+            print("Logging out...")
+
+            self.auth.clear_tokens()
+            webbrowser.open(self.auth.build_logout_url())
+
+            app = QtWidgets.QApplication.instance()
+            if hasattr(app, "login_window"):
+                app.login_window.status_label.setText("Not signed in")
+                app.login_window.show()
+
+            self.close()
+
+        except Exception as e:
+            print(f"Logout error: {e}")
+            import traceback
+            traceback.print_exc()

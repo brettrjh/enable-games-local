@@ -4,6 +4,7 @@ from typing import Optional
 
 import win32gui
 import win32con
+import ctypes
 
 # Helper dataclass to store window information
 @dataclass
@@ -13,7 +14,9 @@ class WindowRect:
     w: int
     h: int
 
+# ------------------------------------------------------------
 # Function to check if a window is a real application window
+# ------------------------------------------------------------
 def _is_real_window(hwnd: int) -> bool:
     if not win32gui.IsWindowVisible(hwnd):
         return False
@@ -22,7 +25,10 @@ def _is_real_window(hwnd: int) -> bool:
         return False
     return True
 
-# Debug function to print all windows that contain a given substring in their title (for troubleshooting window detection)
+# ----------------------------------------------------------------------------------
+# Debug function to print all windows that contain a given substring in their title 
+# (for troubleshooting window detection)
+# ----------------------------------------------------------------------------------
 def debug_print_windows_contains(substr: str):
     target = substr.lower()
     matches = []
@@ -39,7 +45,9 @@ def debug_print_windows_contains(substr: str):
         print(f"  hwnd={hwnd} title='{title}'")
     print()
 
+# -------------------------------------------------------------------------------
 # Function to find a window by checking if its title contains a given substring
+# -------------------------------------------------------------------------------
 def find_window_by_title_contains(title_substring: str) -> Optional[int]:
     target = title_substring.lower()
     found = []
@@ -60,14 +68,66 @@ def find_window_by_title_contains(title_substring: str) -> Optional[int]:
 
     return found[0][0] if found else None
 
+# --------------------------------------------------------------------------
+# Functions to check if the window currently in focus is the target window
+# --------------------------------------------------------------------------
+def is_window_focused(hwnd: int) -> Optional[bool]:
+    focused_hwnd = win32gui.GetForegroundWindow()
+    #print(f"The focused window hwnd is: {focused_hwnd}")
+    #print(f"the target window hwnd is: {hwnd}")
+    if focused_hwnd == hwnd:
+        return True
+    return False
+
+# -------------------------------------------------------------------------
 # Function to get the rectangle of a window given its handle
+# -------------------------------------------------------------------------
 def get_window_rect(hwnd: int) -> Optional[WindowRect]:
     if hwnd is None or not win32gui.IsWindow(hwnd):
         return None
-    left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+    (left, top, right, bottom) = win32gui.GetWindowRect(hwnd)
     w = max(0, right - left)
     h = max(0, bottom - top)
+    #print(f"The coordinates are:\nleft - {left}\ntop - {top}\nwidth - {w}\nheight - {h}")
     if w == 0 or h == 0:
         return None
     return WindowRect(left, top, w, h)
 
+# ------------------------------------------------------------------------
+# Function to adjust rectangle of window given the display's scale factor
+# ------------------------------------------------------------------------
+def account_for_scale_factor(rect: WindowRect) -> Optional[WindowRect]:
+    scaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
+    if scaleFactor == 1:
+        return
+    
+
+# -------------------------------------------------------------------------
+# Function to list windows open so user can select window to attach too
+# -------------------------------------------------------------------------
+def list_open_window_titles() -> list[str]:
+    titles = []
+
+    def enum_cb(hwnd, _):
+        if not _is_real_window(hwnd):
+            return
+        title = win32gui.GetWindowText(hwnd) or ""
+        title = title.strip()
+
+        # Ignore blank titles
+        if not title:
+            return
+        
+        titles.append(title)
+
+    win32gui.EnumWindows(enum_cb, None)
+
+    # Remove duplicates while keeping order
+    seen = set()
+    unique_titles = []
+    for title in titles:
+        if title not in seen:
+            seen.add(title)
+            unique_titles.append(title)
+
+    return unique_titles

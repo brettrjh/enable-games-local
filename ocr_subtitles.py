@@ -1,3 +1,4 @@
+
 import os
 from dataclasses import dataclass
 from typing import Optional
@@ -10,7 +11,7 @@ import pytesseract
 # OCRConfig dataclass to hold configuration for OCR processing
 @dataclass
 class OCRConfig:
-    # region is a box in SCREEN coordinates
+    # the region is a box in SCREEN coordinates
     x: int
     y: int
     w: int
@@ -24,6 +25,9 @@ def init_tesseract_windows():
     # Only needed on Windows if tesseract isn't in PATH.
     if os.name == "nt":
         # CHANGE THIS IF NEEDED
+        #  KAITLYN COMING IN TO YAP ABOUT CHANGING THIS:
+        #   -- IF WE WERE TO PUSH THIS AS ACTUAL SOFTWARE THIS WOULD GET CHANGED TO A 
+        #   -- FILE PATH W/N THE SOFTWARE FOLDER, BUT FOR NOW THIS IS FINE I THINK O7
         guess = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
         if os.path.isfile(guess):
             pytesseract.pytesseract.tesseract_cmd = guess
