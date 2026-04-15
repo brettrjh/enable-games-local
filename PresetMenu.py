@@ -42,10 +42,6 @@ class PresetMenu(QtWidgets.QWidget):
         self.btnBrowsePresets.clicked.connect(self.open_browse_page)
         self.btnImportPreset.clicked.connect(self.import_preset)
         self.btnBack.clicked.connect(self.on_btnBackToMain_click)
-   
-        
-       
-        self.btnBack.clicked.connect(self.on_btnBackToMain_click)
 
     # ------------------------------------------------------------
     # Filter Options click Function:
