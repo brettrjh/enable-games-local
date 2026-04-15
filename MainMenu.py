@@ -6,8 +6,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import QPoint
 from PyQt6.QtGui import QAction
 
-from TweakMenus import VisualMenu, AudioMenu, PhysMenu
-from PresetMenu import PresetMenu
+from navigation import get_navigation_manager
 
 from overlay import OverlayManager
 from window_tracker import list_open_window_titles
@@ -82,36 +81,36 @@ class MainMenu(QtWidgets.QWidget):
 
     def visTweaks_clicked(self):
         print("Visual Tweaks button clicked!")
-        self.visualW = VisualMenu()
-        self.visualW.show()
-        self.close()
+        navigation = get_navigation_manager()
+        if navigation:
+            navigation.navigate(self, "visual")
 
     # ------------------------------------------------------------
     # audTweaks Function:
     # - called when the Audio Tweaks button is clicked
     def audTweaks_clicked(self):
         print("Audio Tweaks button clicked!")
-        self.audioW = AudioMenu()
-        self.audioW.show()
-        self.close()
+        navigation = get_navigation_manager()
+        if navigation:
+            navigation.navigate(self, "audio")
 
     # ------------------------------------------------------------
     # physTweaks Function:
     # - called when the Physical Tweaks button is clicked
     def physTweaks_clicked(self):
         print("Physical Tweaks button clicked!")
-        self.physicalW = PhysMenu()
-        self.physicalW.show()
-        self.close()
+        navigation = get_navigation_manager()
+        if navigation:
+            navigation.navigate(self, "physical")
 
     # ------------------------------------------------------------
     # presMenu Function:
     # - called when the Preset Menu button is clicked
     def presMenu_clicked(self):
         print("Preset Menu button clicked!")
-        self.presetW = PresetMenu()
-        self.presetW.show()
-        self.close()
+        navigation = get_navigation_manager()
+        if navigation:
+            navigation.navigate(self, "preset")
 
 
     #-------------------------------------------------------------
