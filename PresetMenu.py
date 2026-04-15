@@ -5,11 +5,7 @@ from PyQt6.QtWidgets import QFileDialog, QMessageBox
 import shutil
 
 import webbrowser
-
-
-
-# needed for connectivity/opening the main menu
-import MainMenu
+from navigation import get_navigation_manager
 
 
 # ------------------------------------------------------------------------------
@@ -83,13 +79,9 @@ class PresetMenu(QtWidgets.QWidget):
         # return to main menu
         print("Back to main button clicked")
         try:
-            print('creating main menu...')
-            self.mainW = MainMenu.MainMenu()
-            print('showing main menu...')
-            self.mainW.show()
-            print('closing audio menu...')
-            self.close()
-            print('done!')
+            navigation = get_navigation_manager()
+            if navigation:
+                navigation.back(self, fallback_route="main")
         except Exception as e:
             print(f"error: {e}")
             import traceback
@@ -220,9 +212,9 @@ class PresetDownload(QtWidgets.QWidget):
     # - called when the given button is clicked
     def on_btnBackToPreset_click(self):
         try:
-            self.presetW = PresetMenu()
-            self.presetW.show()
-            self.close()
+            navigation = get_navigation_manager()
+            if navigation:
+                navigation.back(self, fallback_route="preset")
         except Exception as e:
             print(f"error: {e}")
             import traceback

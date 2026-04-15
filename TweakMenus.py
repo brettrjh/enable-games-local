@@ -19,8 +19,7 @@ from dynamic_range_manager import DynamicRangeManager
 from settings_manager import SettingsManager
 #------------------------------------------------------
 
-# needed for connectivity/opening the main menu
-import MainMenu
+from navigation import get_navigation_manager
 
 # needed for color / contrast correction
 import cv2
@@ -197,13 +196,9 @@ class VisualMenu(QtWidgets.QWidget):
     # back button, returns to main menu
     def back(self):
         try:
-            print('creating main menu...')
-            self.mainW = MainMenu.MainMenu()
-            print('showing main menu...')
-            self.mainW.show()
-            print('closing visual menu...')
-            self.close()
-            print('done!')
+            navigation = get_navigation_manager()
+            if navigation:
+                navigation.back(self, fallback_route="main")
         except Exception as e:
             print(f"error: {e}")
             import traceback
@@ -852,13 +847,9 @@ class AudioMenu(QtWidgets.QWidget):
     def back_clicked(self):
         print("Back to main menu!")
         try:
-            print('creating main menu...')
-            self.mainW = MainMenu.MainMenu()
-            print('showing main menu...')
-            self.mainW.show()
-            print('closing audio menu...')
-            self.close()
-            print('done!')
+            navigation = get_navigation_manager()
+            if navigation:
+                navigation.back(self, fallback_route="main")
         except Exception as e:
             print(f"error: {e}")
             import traceback
@@ -907,13 +898,9 @@ class PhysMenu(QtWidgets.QWidget):
 
         # opening main menu window debugging
         try:
-            print('creating main menu...')
-            self.mainW = MainMenu.MainMenu()
-            print('showing main menu...')
-            self.mainW.show()
-            print('closing physical menu...')
-            self.close()
-            print('done!')
+            navigation = get_navigation_manager()
+            if navigation:
+                navigation.back(self, fallback_route="main")
         except Exception as e:
             print(f"error: {e}")
             import traceback
@@ -924,11 +911,9 @@ class PhysMenu(QtWidgets.QWidget):
     def controls_button_clicked(self):
         print('controls menu button clicked!')
         try:
-            print('creating keybind menu...')
-            self.keybind = MainMenu.MainMenu()
-            print('showing keybind menu...')
-            self.mainW.show()
-            print('done!')
+            navigation = get_navigation_manager()
+            if navigation:
+                navigation.navigate(self, "keybind")
         except Exception as e:
             print(f"error: {e}")
             import traceback
