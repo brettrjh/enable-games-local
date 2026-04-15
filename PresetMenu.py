@@ -6,6 +6,13 @@ import shutil
 
 import webbrowser
 from navigation import get_navigation_manager
+import webbrowser
+
+
+
+# needed for connectivity/opening the main menu
+import MainMenu
+from theme import apply_standard_control_sizing, set_button_variant
 
 
 # ------------------------------------------------------------------------------
@@ -27,6 +34,8 @@ class PresetMenu(QtWidgets.QWidget):
         ui_path = os.path.join(baseDir, "ui files", "eg_presets_menu.ui")
         uic.loadUi(ui_path, self)
         self.setWindowTitle('Preset Menu')
+        self.resize(900, 700)
+        apply_standard_control_sizing(self)
 
         # Loads the icon dynamically
         img_path = os.path.join(baseDir, "ui files", "Images", "preset_filter_icon.jpg")
@@ -41,6 +50,14 @@ class PresetMenu(QtWidgets.QWidget):
         self.btnPostPreset.clicked.connect(self.open_post_page)
         self.btnBrowsePresets.clicked.connect(self.open_browse_page)
         self.btnImportPreset.clicked.connect(self.import_preset)
+        self.btnBack.clicked.connect(self.on_btnBackToMain_click)
+        set_button_variant(self.btnPostPreset, "primary")
+        set_button_variant(self.btnBrowsePresets, "secondary")
+        set_button_variant(self.btnImportPreset, "secondary")
+        set_button_variant(self.btnBack, "back")
+   
+        
+       
         self.btnBack.clicked.connect(self.on_btnBackToMain_click)
 
     # ------------------------------------------------------------
@@ -138,6 +155,8 @@ class PresetDownload(QtWidgets.QWidget):
 
        
         self.setWindowTitle('Preset Download')
+        self.resize(900, 700)
+        apply_standard_control_sizing(self)
 
         # Loads the icon dynamically
         img_path = os.path.join(baseDir, "ui files", "Images", "preset_download_icon.png")
@@ -152,6 +171,10 @@ class PresetDownload(QtWidgets.QWidget):
         self.btnCreator.clicked.connect(self.on_btnCreator_click)
         self.btnReport.clicked.connect(self.on_btnReport_click)
         self.btnBack.clicked.connect(self.on_btnBackToPreset_click)
+        set_button_variant(self.btnPresetDownload, "primary")
+        set_button_variant(self.btnCreator, "secondary")
+        set_button_variant(self.btnReport, "secondary")
+        set_button_variant(self.btnBack, "back")
 
     def open_post_page(self):
         webbrowser.open("http://enable-games-presets.s3-website.us-east-2.amazonaws.com/post.html")

@@ -43,15 +43,6 @@
         <height>361</height>
        </size>
       </property>
-      <property name="styleSheet">
-       <string notr="true">
-        #frameContent{
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-        }
-       </string>
-      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -142,9 +133,6 @@
            <height>25</height>
           </size>
          </property>
-         <property name="styleSheet">
-          <string notr="true">text-align: left;</string>
-         </property>
          <property name="text">
           <string>Download Preset</string>
          </property>
@@ -167,9 +155,6 @@
            <height>25</height>
           </size>
          </property>
-         <property name="styleSheet">
-          <string notr="true">text-align: left;</string>
-         </property>
          <property name="text">
           <string>More From This Creator</string>
          </property>
@@ -188,9 +173,6 @@
            <width>389</width>
            <height>25</height>
           </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">text-align: left;</string>
          </property>
          <property name="text">
           <string>Report</string>
@@ -211,19 +193,6 @@
         <widget class="QPushButton" name="btnBackToPreset">
          <property name="enabled">
           <bool>true</bool>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">
-            #btnBack {
-                border: none;
-                background: transparent;
-                text-align: left;
-                padding: 6px 0px;
-            }
-            #btnBack:hover {
-                text-decoration: underline;
-            }
-          </string>
          </property>
          <property name="text">
           <string>← Back to Preset Menu</string>
